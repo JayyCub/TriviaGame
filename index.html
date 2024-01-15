@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;800&display=swap" rel="stylesheet">
+    <title>The Game</title>
+</head>
+<body style="margin: 0; background-color: var(--m-1);" onload="getUUID()">
+<div class="page-box">
+    <div class="page-header">
+        <div class="header-title-box">Local Multiplayer Game</div>
+    </div>
+    <div class="page-body">
+        <h1>Select your role:</h1>
+        <div class="body-section">
+            <div class="button-option" onclick="window.location.href = `${url}/host/setup`">
+                <div class="button-text">Host</div>
+                <div id="host-error" class="error-text"></div>
+            </div>
+        </div>
+
+        <div class="body-section">
+            <div class="button-option" onclick="initPlayer()">
+                <div class="button-text">Player</div>
+                <div id="player-error" class="error-text"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
+<script>
+    const url = window.location.origin;
+    // let isHost = false;
+    // let isPlayer = false;
+
+    // async function getData() {
+    //     await getUUID();
+    //     await getIsHost();
+    // }
+
+    // async function getIsHost() {
+    //     await fetch(`${url}/host/check`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             localStorage.setItem("uuid", data.uuid)
+    //             console.log(`Your UUID: ${data.uuid}`);
+    //         });
+    // }
+
+    async function getUUID() {
+        let local_uuid = localStorage.getItem("uuid");
+        if (local_uuid === null || local_uuid === "" || local_uuid === "null") {
+            console.log("Getting new UUID...");
+            await fetch(`${url}/uuid`)
+                .then(response => response.json())
+                .then(data => {
+                    localStorage.setItem("uuid", data.uuid)
+                });
+        } else {
+            console.log("Found existing UUID")
+        }
+        console.log("Your UUID: " + localStorage.getItem("uuid"));
+    }
+
+    function initPlayer() {
+        console.log("Starting player")
+    }
+
+    // window.onbeforeunload = async function() {
+    //     if (localStorage.getItem("isHost") === "true") {
+    //         await fetch(`${url}/host/end`, {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             }
+    //         })
+    //     }
+    //     localStorage.setItem("isHost", "false");
+    //     localStorage.setItem("uuid", null)
+    //     return "";
+    // }
+</script>
+<style>
+    :root {
+        /** CSS DARK THEME PRIMARY COLORS */
+        --p-1: #2196f3;
+        --p-2: #50a1f5;
+        --p-3: #6eacf6;
+        --p-4: #87b8f8;
+        --p-5: #9dc3f9;
+        --p-6: #b2cffb;
+        /** CSS DARK THEME SURFACE COLORS */
+        --s-1: #121212;
+        --s-2: #282828;
+        --s-3: #3f3f3f;
+        --s-4: #575757;
+        --s-5: #717171;
+        --s-6: #8b8b8b;
+        /** CSS DARK THEME MIXED SURFACE COLORS */
+        --m-1: #1f2938;
+        --m-2: #353d4b;
+        --m-3: #4b5360;
+        --m-4: #626975;
+        --m-5: #7b808a;
+        --m-6: #9498a1;
+        /** EXAMPLES */
+        /*color: var(--p-6);*/
+        background-color: var(--s-3);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        color: whitesmoke;
+
+    }
+    .page-box {
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--m-1);
+        margin: 0;
+    }
+    .page-header {
+        width: 100%;
+        height: 60px;
+        background-color: var(--m-3);
+        border-bottom-left-radius: 30px 10px;
+        border-bottom-right-radius: 30px 10px;
+        display: flex;
+        align-items: center;
+    }
+    .header-title-box {
+        color: white;
+        font-size: 32px;
+        font-weight: 800;
+        margin-left: 5vw;
+    }
+    .page-body {
+        width: 100%;
+        text-align: center;
+        /*height: 50%;*/
+    }
+    .body-section {
+        width: 80%;
+        margin: 20px 10% 0 10%;
+        display: flex;
+    }
+    .button-option {
+        width: 70%;
+        margin: 0 15% 0 15%;
+        border-radius: 25px;
+        background-color: var(--s-5);
+        height: 100px;
+        text-align: center;
+        font-size: 32px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+    }
+    .button-option:hover {
+        background-color: var(--s-4);
+    }
+    .button-text {
+        position: relative;
+        width: 50%;
+        line-height: 100px;
+        margin: 0 25% 0 25%;
+    }
+    .error-text {
+        margin-top: -22px;
+        color: #7d0000;
+        font-size: 16px;
+        z-index: 999;
+    }
+</style>
