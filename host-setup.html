@@ -17,6 +17,12 @@
         <h1>Game Host Setup:</h1>
         <div class="body-section">
             <div class="label-box">
+                <div class="label-text">Lobby nickname:&nbsp;</div>
+                <label class="answer-box">
+                    <input type="text" maxlength="20" minlength="3" value="" id="lobbyName">
+                </label>
+            </div>
+            <div class="label-box">
                 <div class="label-text">Number of Questions:&nbsp;</div>
                 <label class="answer-box">
                     <input type="number" max="10" min="1" value="1" id="numQuestions">
@@ -66,6 +72,8 @@
 
     async function initiateGame() {
         document.getElementById("loading-text").textContent = "Loading..."
+        let lobbyName = document.getElementById("lobbyName").value;
+        console.log(`Lobby: ${lobbyName}`);
         let numQuestions = document.getElementById("numQuestions").value.toString();
         let category = document.getElementById("categories").value;
         let difficulty = document.getElementById("difficulty").value;
@@ -75,6 +83,7 @@
             headers: {
                 "Content-Type": "application/json",
                 "uuid": localStorage.getItem("uuid"),
+                "name": lobbyName,
                 "num": numQuestions,
                 "category": category,
                 "difficulty": difficulty,
@@ -84,6 +93,7 @@
                 if (data.success) {
                     console.log("Let's start this game!");
                     document.getElementById("loading-text").textContent = ""
+                    window.location.href = `${url}/host/lobby`
                 }
             })
             .catch(error => {

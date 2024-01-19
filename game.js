@@ -12,20 +12,24 @@ class GameClass {
   category;
   difficulty;
   lobbyName;
+  gameStatus;
 
   /**
-     * Constructor to create a game object and set default values.
-     * @param {string} hostID
-     * @param {number} numQuestions
-     * @param {string} category
-     * @param {string} difficulty
-     */
-  constructor(hostID, numQuestions, category, difficulty) {
+   * Constructor to create a game object and set default values.
+   * @param {string} hostID
+   * @param {number} numQuestions
+   * @param {string} category
+   * @param {string} difficulty
+   * @param lobbyName
+   */
+  constructor(hostID, numQuestions, category, difficulty, lobbyName) {
     this.gameID = crypto.randomUUID();
     this.hostID = hostID;
     this.numQuestions = numQuestions;
     this.category = category;
     this.difficulty = difficulty;
+    this.lobbyName = lobbyName;
+    this.gameStatus = 'lobby';
   }
 
   // eslint-disable-next-line require-jsdoc

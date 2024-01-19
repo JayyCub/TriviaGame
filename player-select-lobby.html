@@ -8,17 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;800&display=swap" rel="stylesheet">
     <title>The Game</title>
 </head>
-<body style="margin: 0; background-color: var(--m-1);" onload="">
+<body style="margin: 0; background-color: var(--m-1);" onload="getLobbies()">
 <div class="page-box">
     <div class="page-header">
         <div class="header-title-box">Local Multiplayer Game</div>
     </div>
     <div class="page-body">
-        <div class="body-section"><h3>Game Lobby:</h3></div>
+        <div class="body-section"><h3>Available Lobbies:</h3></div>
         <div class="body-section">
             <div class="player-list-box" id="player-list">
                 <div class="no-players" id="no-players-text">
-                    <i>No players in lobby</i>
+                    <i>No lobbies available</i>
                 </div>
             </div>
         </div>
@@ -28,11 +28,30 @@
 </html>
 <script>
     const url = window.location.origin;
-    for (let i = 0; i < 10; i++) {
-        let newItem = document.createElement("div");
-        newItem.className = "player-list-item";
-        newItem.textContent = "some-player-name";
-        document.getElementById('player-list').append(newItem);
+    let lobbies;
+    // for (let i = 0; i < 10; i++) {
+    //     let newItem = document.createElement("div");
+    //     newItem.className = "player-list-item";
+    //     newItem.textContent = "some-player-name";
+    //     document.getElementById('player-list').append(newItem);
+    // }
+
+    async function getLobbies() {
+        await fetch(`${url}/player/find-lobbies`)
+            .then(response => response.json())
+            .then(data => {
+                lobbies = data.lobbies;
+            });
+        if (Object.entries(lobbies).length > 0) {
+            for (const [key, value] of Object.entries(lobbies)) {
+                let newItem = document.createElement("div");
+                newItem.className = "player-list-item";
+                newItem.textContent = value.name;
+                newItem.id = value.gameID;
+                document.getElementById('player-list').append(newItem);
+            }
+        }
+        document.getElementById("no-players-text").style.display = "none";
     }
 </script>
 <style>
@@ -98,6 +117,7 @@
         font-size: 24px;
     }
     .player-list-box {
+        padding: 0 1% 0 1%;
         width: 50%;
         /*min-height: 400px;*/
         background-color: var(--m-5);
@@ -111,8 +131,9 @@
     .player-list-item {
         /*background-color: #7d0000;*/
         padding: 5%;
-        width: fit-content;
+        width: 100%;
         text-shadow: var(--s-1) 0 4px 6px;
+        border-bottom: 1px solid #ccc;
     }
     .no-players {
         padding: 5%;
